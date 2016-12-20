@@ -1,0 +1,5 @@
+name = Instant Articles
+description = Display Nodes with Ajax.
+package = Other
+core = 7.x
+files[] = instant_article.module
