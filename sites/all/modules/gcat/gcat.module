@@ -23,7 +23,7 @@ function gcat_menu() {
 function gcat_form() {
   $form['gcat'] = array(
     '#title' => 'Enter one half of a DNA sequence.',
-    '#description' => t("Enter one half of a DNA sequence."),
+    '#description' => t("The computer will generate the other half for you."),
     '#required' => TRUE,
     '#type' => 'textfield',
     '#element_validate' => array('element_validate_gcat'),
@@ -68,6 +68,7 @@ function gcat_form_submit($form, &$form_state) {
   $output = implode($second_half);
   $_SESSION['output'] = $output;
   $form_state['redirect'] = 'gcat_results';
+  return $output;
 }
 
 function gcat_results() {

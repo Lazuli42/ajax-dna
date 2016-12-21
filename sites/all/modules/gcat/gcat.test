@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Functional tests for the simple contact module.
+ * Unit tests for the simple contact module.
  */
 
 class GcatUnitTests extends DrupalUnitTestCase {
@@ -21,13 +21,13 @@ class GcatUnitTests extends DrupalUnitTestCase {
 
   public function testGcatAlgorithm() {
     $description = 'acgttagc should result in "TGCAATCG".';
-    
+
     $form_state['values']['gcat'] = "acgttagc";
     $form = "GCAT";
 
     $output = gcat_form_submit($form, $form_state);
 
-    $this->assertEqual($output, "TGCAATCG", $description)
+    $this->assertEqual($output, "TGCAATCG", $description);
   }
 
 }
@@ -47,14 +47,18 @@ class GcatWebTests extends DrupalWebTestCase {
   }
 
   /**
-   * Confirms form is working.
+   * Confirms the form is working.
    */
 
   public function testGcatForm() {
-    $info['gcat'] = "gcat";
+    $this->drupalGet('gcat');
+
+    $this->assertText("Enter one half of a DNA sequence.", 'If text is true, then the page is displaying.');
+
+    $form_state['values']['gcat'] = "gcat";
     drupal_form_submit('gcat_form', $form_state);
 
-    $this->assertText("CGTA", 'gcat should result in "CGTA" appearing on the page.');
+    $this->assertText("GCAT", 'Drupal should redirect to a new page and display "CGTA".');
   }
 
 }
