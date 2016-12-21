@@ -1,0 +1,77 @@
+<?php
+
+function gcat_menu() {
+  $items['gcat'] = array(
+    'title' => 'GCAT',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('gcat_form')
+  );
+  $items['gcat_results'] = array(
+    'title' => 'GCAT',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'page callback' => 'gcat_results',
+  );
+  $items['gcat_result'] = array(
+
+  );
+  return $items;
+}
+
+function gcat_form() {
+  $form['gcat'] = array(
+    '#title' => 'Enter one half of a DNA sequence.',
+    '#description' => t("Enter one half of a DNA sequence."),
+    '#required' => TRUE,
+    '#type' => 'textfield',
+    '#element_validate' => array('element_validate_gcat'),
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+  );
+  return $form;
+}
+
+function element_validate_gcat($element) {
+  $inputs = str_split(strtoupper($element['#value']));
+
+  foreach ($inputs as $input) {
+    if (in_array( $input, ['A', 'C', 'G', 'T'] ) != TRUE) {
+      form_error($element, t("You must enter 'A', 'C', 'G', or 'T'."));
+    }
+  }
+
+
+}
+
+function gcat_form_submit($form, &$form_state) {
+  $input = strtoupper($form_state['values']['gcat']);
+  $_SESSION['input'] = $input;
+  $nucleotides = str_split($input);
+  $second_half = array(); // Matching set of nucleotides.
+
+  foreach ($nucleotides as $nucleotide) {
+    if ($nucleotide == 'A') {
+      $second_half[] = 'T';
+    } else if ($nucleotide == 'C') {
+      $second_half[] = 'G';
+    } else if ($nucleotide == 'G') {
+      $second_half[] = 'C';
+    } else if ($nucleotide == 'T') {
+      $second_half[] = 'A';
+    }
+  }
+
+  $output = implode($second_half);
+  $_SESSION['output'] = $output;
+  $form_state['redirect'] = 'gcat_results';
+}
+
+function gcat_results() {
+  $input = $_SESSION['input'];
+  $output = $_SESSION['output'];
+  return "<h1 class='text-center'>" . $input . " -> " . $output . "</h1>";
+}

@@ -1,0 +1,6 @@
+name = GCAT
+description = Pairs half a DNA sequence with its corresponding nucleotide.
+core = 7.x
+package = Other
+files[] = gcat.module
+files[] = gcat.test

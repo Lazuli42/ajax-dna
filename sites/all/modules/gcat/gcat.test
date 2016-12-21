@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Functional tests for the simple contact module.
+ */
+
+class GcatUnitTests extends DrupalUnitTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => "GCAT Unit Tests",
+      description => t('Tests the logic of the GCAT module.'),
+      'group' => '001 Epicodus Review',
+    );
+  }
+
+  /**
+   * Confirms function is pairing nucleotides correctly.
+   */
+
+  public function testGcatAlgorithm() {
+    $description = 'acgttagc should result in "TGCAATCG".';
+    
+    $form_state['values']['gcat'] = "acgttagc";
+    $form = "GCAT";
+
+    $output = gcat_form_submit($form, $form_state);
+
+    $this->assertEqual($output, "TGCAATCG", $description)
+  }
+
+}
+
+class GcatWebTests extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => "GCAT Functional Tests",
+      description => t('Tests the web functionality of the GCAT module.'),
+      'group' => '001 Epicodus Review',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('gcat'));
+  }
+
+  /**
+   * Confirms form is working.
+   */
+
+  public function testGcatForm() {
+    $info['gcat'] = "gcat";
+    drupal_form_submit('gcat_form', $form_state);
+
+    $this->assertText("CGTA", 'gcat should result in "CGTA" appearing on the page.');
+  }
+
+}
